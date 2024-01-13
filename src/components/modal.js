@@ -1,47 +1,47 @@
-const popupEdit = document.querySelector('.popup_type_edit');
-popupEdit.classList.add('popup_is-animated');
-const popupAdd = document.querySelector('.popup_type_new-card');
-popupAdd.classList.add('popup_is-animated');
-const buttonEdit = document.querySelector('.profile__edit-button');
-const buttonAdd = document.querySelector('.profile__add-button');
+import {formEditElement, nameInput, jobInput, nameValue, jobValue, popupEdit, popupAdd, buttonEdit, buttonAdd} from './index';
+//когда наладишь config не забудь перенести экспорт
+function openPopup(popup) { 
+    popup.classList.add('popup_is-animated'); 
+    popup.classList.add('popup_is-opened');
+    const closeButton = popup.querySelector('.popup__close');
+    closeButton.addEventListener('click', function(){
+        closePopup(popup);
+    });
+    popup.addEventListener('click', function(evt){
+        if (evt.target !== popup) {
+            return;
+          }
+          closePopup(popup);
+    })
+    document.addEventListener('keydown', closeEscPopup);
+     //добавляем класс к элементу попапа  
+     //вешаем обработчик closeEscPopup на document 
+   }
+   
+function closePopup(popup) {  
+    popup.classList.remove('popup_is-opened');
+    document.removeEventListener('keydown', function(evt){})
+     //удаляем класс у элемента попапа  
+     //удаляем обработчик closeEscPopup у document 
+}
 
+function closeEscPopup(evt) { 
+    if (evt.key === 'Escape') { 
+     const popup = document.querySelector('.popup_is-opened');// ищем открытый popup по классу 'popup_opened' 
+     closePopup(popup); 
+    } 
+}
 export default function modalOpen (type){
     if (type === buttonEdit){
-        popupEdit.classList.add('popup_is-opened');
-        const buttonDel = popupEdit.querySelector('.popup__close');
-        buttonDel.addEventListener('click', modalClose);
-        popupEdit.addEventListener('click', function(evt){
-            if (evt.target !== popupEdit) {
-                return;
-              }
-            modalClose(evt);
-        });
-        document.addEventListener('keydown', function(evt){
-            if (evt.key == "Escape") {
-                popupEdit.classList.remove('popup_is-opened');
-                document.removeEventListener('keydown', function(evt){})
-           }
-        })
+        openPopup(popupEdit);
+        nameInput.value = nameValue.textContent;
+        jobInput.value = jobValue.textContent;
     }
     else if (type === buttonAdd){
-        popupAdd.classList.add('popup_is-opened');
-        const buttonDel = popupAdd.querySelector('.popup__close');
-        buttonDel.addEventListener('click', modalClose);
-        popupAdd.addEventListener('click', function(evt){
-            if (evt.target !== popupAdd) {
-                return;
-              }
-            modalClose(evt);
-        });
-        document.addEventListener('keydown', function(evt){
-            if (evt.key == "Escape") {
-                popupAdd.classList.remove('popup_is-opened');
-                document.removeEventListener('keydown', function(evt){})
-           }
-        })
+        openPopup(popupAdd);
     }
 }
-function modalClose (evt){
-    evt.target.closest('.popup').classList.remove('popup_is-opened');
-}
-export {modalClose};
+export {closePopup, popupEdit, openPopup, closeEscPopup};
+
+
+
