@@ -11,29 +11,33 @@ export const popupEdit = document.querySelector('.popup_type_edit');
 export const popupAdd = document.querySelector('.popup_type_new-card');
 export const buttonEdit = document.querySelector('.profile__edit-button');
 export const buttonAdd = document.querySelector('.profile__add-button');
-export const formEditElement = document.querySelector('.popup__form');
+export const formEditElement = popupEdit.querySelector('.popup__form');
 export const nameInput = formEditElement.querySelector('.popup__input_type_name');
 export const jobInput = formEditElement.querySelector('.popup__input_type_description');
 export const nameValue = document.querySelector('.profile__title');
 export const jobValue = document.querySelector('.profile__description');
+const imgPopup = document.querySelector('.popup_type_image');
+const imgpopupImg = imgPopup.querySelector('.popup__image');
+const imgpopupCaption = imgPopup.querySelector('.popup__caption');
 // @todo: DOM узлы
 // @todo: Вывести карточки на страницу
 initialCards.forEach(function (element) {
     placesList.append(cardAdd(element.name, element.link, deleteCard, iconLike));
 })
 // Открытие и закрытие модального окна
-import modalOpen from './modal';
-main.addEventListener('click', function (evt) {
-    modalOpen(evt.target)
+buttonEdit.addEventListener('click', function (evt) {
+    openPopup(popupEdit);
+    nameInput.value = nameValue.textContent;
+    jobInput.value = jobValue.textContent;
+});
+buttonAdd.addEventListener('click', function (evt) {
+    openPopup(popupAdd);
 });
 export function openimgPopup(evt){
-    const imgPopup = document.querySelector('.popup_type_image');
     openPopup(imgPopup);
-    const popupImg = imgPopup.querySelector('.popup__image');
-    popupImg.src = evt.target.src;
-    popupImg.alt=evt.target.closest('.card').textContent;
-    const popupCaption = imgPopup.querySelector('.popup__caption');
-    popupCaption.textContent = evt.target.closest('.card').textContent;
+    imgpopupImg.src = evt.target.src;
+    imgpopupImg.alt=evt.target.closest('.card').textContent;
+    imgpopupCaption.textContent = evt.target.closest('.card').textContent;
 }
 //Редактирование имени и информации о себе
 function handleFormEditSubmit(evt) {
@@ -48,7 +52,7 @@ formEditElement.addEventListener('submit', handleFormEditSubmit);
 formAddElement.addEventListener('submit', function(evt){
     evt.preventDefault();
     placesList.prepend(cardAdd(placeNameInput.value, placeLinklInput.value, deleteCard, iconLike));
-    evt.target.closest('.popup').classList.remove('popup_is-opened');
+    closePopup(popupAdd);
     formAddElement.reset();
 })
 

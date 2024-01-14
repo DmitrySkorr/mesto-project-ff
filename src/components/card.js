@@ -9,18 +9,10 @@ function cardAdd(name, link, deleteCard, iconLike) {
     cards.querySelector('.card__image').alt = name;
     cards.querySelector('.card__image').src = link;
     cards.querySelector('.card__title').textContent = name;
-    cards.addEventListener('click', function(evt){
-        if (evt.target === likeButton){
-            iconLike(evt);
-        }
-        else if ( evt.target === cards.querySelector('.card__image')){
-            openimgPopup(evt);
-        }
-        else if (evt.target === delButton){
-            deleteCard(evt);
-        }
-        
-    })
+    likeButton.addEventListener('click', (evt) => iconLike(evt));
+    delButton.addEventListener('click', (evt) => deleteCard(evt));
+    delButton.addEventListener('click', (evt) => deleteCard(evt));
+    cards.querySelector('.card__image').addEventListener('click', (evt) => openimgPopup(evt));
     return cards;
 }
 // @todo: Функция удаления карточки
