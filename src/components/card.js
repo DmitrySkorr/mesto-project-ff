@@ -1,7 +1,7 @@
-import {openimgPopup} from './index.js';
+//import {openimgPopup} from './index.js';
 const cardTemplate = document.querySelector('#card-template').content;
 // @todo: Функция создания карточки
-function cardAdd(name, link, deleteCard, iconLike) {
+function cardAdd(name, link, deleteCard, iconLike, openimgPopupCallback) {
     const cards = cardTemplate.querySelector('.card').cloneNode(true);
     const delButton = cards.querySelector('.card__delete-button');
     const likeButton = cards.querySelector('.card__like-button');
@@ -12,7 +12,7 @@ function cardAdd(name, link, deleteCard, iconLike) {
     likeButton.addEventListener('click', (evt) => iconLike(evt));
     delButton.addEventListener('click', (evt) => deleteCard(evt));
     delButton.addEventListener('click', (evt) => deleteCard(evt));
-    cards.querySelector('.card__image').addEventListener('click', (evt) => openimgPopup(evt));
+    cards.querySelector('.card__image').addEventListener('click', (evt) => openimgPopupCallback(evt));
     return cards;
 }
 // @todo: Функция удаления карточки

@@ -22,7 +22,7 @@ const imgpopupCaption = imgPopup.querySelector('.popup__caption');
 // @todo: DOM узлы
 // @todo: Вывести карточки на страницу
 initialCards.forEach(function (element) {
-    placesList.append(cardAdd(element.name, element.link, deleteCard, iconLike));
+    placesList.append(cardAdd(element.name, element.link, deleteCard, iconLike, openimgPopup));
 })
 // Открытие и закрытие модального окна
 buttonEdit.addEventListener('click', function (evt) {
@@ -30,6 +30,21 @@ buttonEdit.addEventListener('click', function (evt) {
     nameInput.value = nameValue.textContent;
     jobInput.value = jobValue.textContent;
 });
+OverlayButtonAddListener(popupEdit);
+OverlayButtonAddListener(popupAdd);
+OverlayButtonAddListener(imgPopup);
+function OverlayButtonAddListener(popup){
+    const closeButton = popup.querySelector('.popup__close');
+    closeButton.addEventListener('click', function(){
+        closePopup(popup);
+    });
+    popup.addEventListener('click', function(evt){
+        if (evt.target !== popup) {
+            return;
+          }
+          closePopup(popup);
+    })
+}
 buttonAdd.addEventListener('click', function (evt) {
     openPopup(popupAdd);
 });
@@ -55,4 +70,5 @@ formAddElement.addEventListener('submit', function(evt){
     closePopup(popupAdd);
     formAddElement.reset();
 })
+
 
