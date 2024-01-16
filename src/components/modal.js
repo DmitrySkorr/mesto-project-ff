@@ -20,7 +20,19 @@ function closeEscPopup(evt) {
      closePopup(popup); 
     } 
 }
-export {closePopup, popupEdit, openPopup, closeEscPopup};
+function setListenerOverlayButtton(popup){
+    const closeButton = popup.querySelector('.popup__close');
+    closeButton.addEventListener('click', function(){
+        closePopup(popup);
+    });
+    popup.addEventListener('click', function(evt){
+        if (evt.target !== popup) {
+            return;
+          }
+          closePopup(popup);
+    })
+}
+export {closePopup, popupEdit, openPopup, closeEscPopup,setListenerOverlayButtton};
 
 
 

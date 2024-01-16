@@ -1,5 +1,5 @@
 import '../pages/index.css';
-import {closePopup, openPopup, closeEscPopup} from './modal';
+import {closePopup, openPopup, closeEscPopup, setListenerOverlayButtton} from './modal';
 import { initialCards } from './cards';
 import {cardAdd, deleteCard, cardTemplate, iconLike} from './card';
 const formAddElement = document.forms.new;
@@ -30,21 +30,10 @@ buttonEdit.addEventListener('click', function (evt) {
     nameInput.value = nameValue.textContent;
     jobInput.value = jobValue.textContent;
 });
-OverlayButtonAddListener(popupEdit);
-OverlayButtonAddListener(popupAdd);
-OverlayButtonAddListener(imgPopup);
-function OverlayButtonAddListener(popup){
-    const closeButton = popup.querySelector('.popup__close');
-    closeButton.addEventListener('click', function(){
-        closePopup(popup);
-    });
-    popup.addEventListener('click', function(evt){
-        if (evt.target !== popup) {
-            return;
-          }
-          closePopup(popup);
-    })
-}
+setListenerOverlayButtton(popupEdit);
+setListenerOverlayButtton(popupAdd);
+setListenerOverlayButtton(imgPopup);
+
 buttonAdd.addEventListener('click', function (evt) {
     openPopup(popupAdd);
 });
@@ -66,7 +55,7 @@ formEditElement.addEventListener('submit', handleFormEditSubmit);
 //Форма добавления карточки
 formAddElement.addEventListener('submit', function(evt){
     evt.preventDefault();
-    placesList.prepend(cardAdd(placeNameInput.value, placeLinklInput.value, deleteCard, iconLike));
+    placesList.prepend(cardAdd(placeNameInput.value, placeLinklInput.value, deleteCard, iconLike, openimgPopup));
     closePopup(popupAdd);
     formAddElement.reset();
 })
