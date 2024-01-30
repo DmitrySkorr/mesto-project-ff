@@ -1,4 +1,5 @@
 import '../pages/index.css';
+import {enableValidation, config, clearValidation} from './scripts/validation';
 import {closePopup, openPopup, closeEscPopup, setListenerOverlayButtton} from './modal';
 import { initialCards } from './cards';
 import {cardAdd, deleteCard, cardTemplate, iconLike} from './card';
@@ -29,6 +30,9 @@ buttonEdit.addEventListener('click', function (evt) {
     openPopup(popupEdit);
     nameInput.value = nameValue.textContent;
     jobInput.value = jobValue.textContent;
+    enableValidation(config);
+    clearValidation(formEditElement, config);
+
 });
 setListenerOverlayButtton(popupEdit);
 setListenerOverlayButtton(popupAdd);
@@ -36,6 +40,8 @@ setListenerOverlayButtton(imgPopup);
 
 buttonAdd.addEventListener('click', function (evt) {
     openPopup(popupAdd);
+    enableValidation(config);
+
 });
 export function openimgPopup(evt){
     openPopup(imgPopup);
@@ -58,6 +64,7 @@ formAddElement.addEventListener('submit', function(evt){
     placesList.prepend(cardAdd(placeNameInput.value, placeLinklInput.value, deleteCard, iconLike, openimgPopup));
     closePopup(popupAdd);
     formAddElement.reset();
+    clearValidation(formAddElement, config);
 })
 
 
