@@ -40,6 +40,9 @@
   z-index: 2;
   position: absolute;
 }
+.popup__input-error:last-of-type {
+  margin-block-start: 10px;
+}
 .popup__error_visible {
   opacity: 1;
 }

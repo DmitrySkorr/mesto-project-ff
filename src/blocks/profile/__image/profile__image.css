@@ -7,6 +7,9 @@
   background-size: cover;
   background-position: center;
   margin: 0 29px 0 0;
+  position: relative;
+  z-index: 1;
+  background-image: url('https://ireland10.ru/wp-content/webpc-passthru.php?src=https://ireland10.ru/wp-content/uploads/2022/05/jason-dent-xbii47frZKA-unsplash.jpg&nocache=1');
 }
 
 @media screen and (max-width: 740px) {
@@ -19,4 +22,25 @@
   .profile__image {
     margin-right: 0;
   }
+}
+.profile__image-hover {
+  position: absolute;
+  top: -0.5%;
+  left: -0.5%;
+  z-index: 2;
+  opacity: 0;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  height: 101%;
+  width: 101%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  
+}
+.profile__image-hover:hover {
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.8);
 }
