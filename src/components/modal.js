@@ -1,5 +1,4 @@
-import {popupEdit} from './index';
-import {enableValidation, config, clearValidation} from './scripts/validation'
+
 //когда наладишь config не забудь перенести экспорт
 function openPopup(popup) { 
     popup.classList.add('popup_is-opened');
@@ -33,7 +32,7 @@ function setListenerOverlayButtton(popup){
           closePopup(popup);
     })
 }
-export {closePopup, popupEdit, openPopup, closeEscPopup,setListenerOverlayButtton};
+export {closePopup, openPopup,setListenerOverlayButtton};
 
 
 

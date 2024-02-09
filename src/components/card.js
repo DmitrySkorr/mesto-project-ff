@@ -1,32 +1,29 @@
-//import {openimgPopup} from './index.js';
-import { myId } from './index';
-import { likePut, likeDelete, delCardApi } from './scripts/api';
-import { likeReload } from './scripts/api';
-import { closePopup, openPopup, closeEscPopup, setListenerOverlayButtton } from './modal';
+import { putLike, deleteLike, deleteCardApi } from './scripts/api';
+import { closePopup, openPopup, setListenerOverlayButtton } from './modal';
 const cardTemplate = document.querySelector('#card-template').content;
 const popupDelete = document.querySelector('.popup_type_delete-card');
 const deleteCardButton = popupDelete.querySelector('.popup__button');
-// @todo: Функция создания карточки
-function cardAdd(name, link, likes, id, ownerId, deleteCard, iconLike, openimgPopupCallback) {
-    const cards = cardTemplate.querySelector('.card').cloneNode(true);
-    const delButton = cards.querySelector('.card__delete-button');
-    const likeButton = cards.querySelector('.card__like-button');
-    let likeCounter = cards.querySelector('.card__like-button-counter');
-    likeCounter.textContent = likes.length;
+// @todo: Функция создания карточки name, link, likes, id, ownerId,
+function createCard(data, deleteCard, iconLike, openimgPopupCallback, myId) {
+    const card = cardTemplate.querySelector('.card').cloneNode(true);
+    const delButton = card.querySelector('.card__delete-button');
+    const likeButton = card.querySelector('.card__like-button');
+    let likeCounter = card.querySelector('.card__like-button-counter');
+    likeCounter.textContent = data.likes.length;
     const img = document.querySelector('.card__image');
-    cards.querySelector('.card__image').alt = name;
-    cards.querySelector('.card__image').src = link;
-    likes.forEach(function (element) {
+    card.querySelector('.card__image').alt = data.name;
+    card.querySelector('.card__image').src = data.link;
+    data.likes.forEach(function (element) {
         if (element._id === myId) {
             likeButton.classList.add('card__like-button_is-active');
         }
     })
-    cards.querySelector('.card__title').textContent = name;
-    likeButton.addEventListener('click', (evt) => iconLike(evt, likes, likeCounter, id));
-    delCard(ownerId, myId, delButton, id);
-
-    cards.querySelector('.card__image').addEventListener('click', (evt) => openimgPopupCallback(evt));
-    return cards;
+    card.querySelector('.card__title').textContent = data.name;
+    likeButton.addEventListener('click', (evt) => iconLike(evt, data.likes, likeCounter, data._id));
+    //delCard(data.owner._id, myId, delButton, data._id);
+    defenitionDelCardIcon (data.owner._id, myId, delButton);
+    card.querySelector('.card__image').addEventListener('click', (evt) => openimgPopupCallback(evt));
+    return card;
 }
 // @todo: Функция удаления карточки
 function deleteCard(evt) {
@@ -36,14 +33,20 @@ function deleteCard(evt) {
 function iconLike(evt, likes, likeCounter, id) {
     if (!(evt.target.classList.contains('card__like-button_is-active'))) {
         evt.target.classList.add('card__like-button_is-active');
-        likePut(id, likeCounter)
+        putLike(id, likeCounter)
+        .catch((err) => {
+            console.log(err); // выводим ошибку в консоль
+          })
     } else {
         evt.target.classList.remove('card__like-button_is-active');
-        likeDelete(id, likeCounter)
+        deleteLike(id, likeCounter)
+        .catch((err) => {
+            console.log(err); // выводим ошибку в консоль
+          })
     }
 }
 
-function delCard(ownerId, myId, delButton, id) {
+/*function delCard(ownerId, myId, delButton, id) {
     if (ownerId == myId) {
         delButton.addEventListener('click', function (evt) {
             const event = evt;
@@ -52,7 +55,10 @@ function delCard(ownerId, myId, delButton, id) {
             deleteCardButton.addEventListener('click', () => {
                 deleteCard(event);
                 closePopup(popupDelete);
-                delCardApi(id)
+                deleteCardApi(id)
+                .catch((err) => {
+                    console.log(err); // выводим ошибку в консоль
+                  })
             })
         }
         )
@@ -60,5 +66,21 @@ function delCard(ownerId, myId, delButton, id) {
     else {
         delButton.style.display = 'none';
     }
+
+function defenitionDelCardIcon (ownerId, myId) {
+    if (!ownerId == myId) {
+        delButton.style.display = 'none';
+    }
 }
-export { cardAdd, deleteCard, cardTemplate, iconLike };
+
+}*/
+function defenitionDelCardIcon (ownerId, myId, delButton) {
+    if ((ownerId == myId)) {
+        console.log(1);
+    }
+    else {
+        delButton.style.display = 'none';
+
+    }
+}
+export { createCard, deleteCard, iconLike };

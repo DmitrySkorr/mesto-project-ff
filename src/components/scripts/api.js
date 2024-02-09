@@ -1,10 +1,10 @@
-import { cardAdd } from "../card"
-import { nameValue, jobValue, profAvatar, placesList, openimgPopup} from ".."
-import { deleteCard, iconLike } from "../card"
+const commonLink = 'https://nomoreparties.co/v1/wff-cohort-5';
+const authorizationData = 'c52618b5-5707-4e7f-96f5-da48c2905442'
+// `${commonLink}`
 function getUser() {
-    return fetch('https://nomoreparties.co/v1/wff-cohort-5/users/me', {
+    return fetch(`${commonLink}/users/me`, {
         headers: {
-            authorization: 'c52618b5-5707-4e7f-96f5-da48c2905442'
+            authorization: `${authorizationData}`
         }
     })
         .then((res) => {
@@ -18,9 +18,9 @@ function getUser() {
 }
 // запрос списка карточек
 function getCards() {
-    return fetch('https://nomoreparties.co/v1/wff-cohort-5/cards', {
+    return fetch(`${commonLink}/cards`, {
         headers: {
-            authorization: 'c52618b5-5707-4e7f-96f5-da48c2905442'
+            authorization: `${authorizationData}`
         }
     })
         .then((res) => {
@@ -31,27 +31,14 @@ function getCards() {
                 return Promise.reject(res.status);
             }
         })
-        .catch((err) => {
-            console.log(err); // выводим ошибку в консоль
-          })
+        
 }
-
-Promise.all([getUser(), getCards()])
-    .then(([userData, cardsData]) => {
-        nameValue.textContent = userData.name;
-        jobValue.textContent = userData.about;
-        profAvatar.style.backgroundImage = `url(${userData.avatar})`;
-
-        cardsData.forEach(function (element) {
-            placesList.append(cardAdd(element.name, element.link, element.likes, element._id, element.owner._id, deleteCard, iconLike, openimgPopup));
-        })
-    })
 //Редактирование профиля
-function nameChange(name, about) {
-    return fetch('https://nomoreparties.co/v1/wff-cohort-5/users/me', {
+function changeName(name, about) {
+    return fetch(`${commonLink}/users/me`, {
         method: 'PATCH',
         headers: {
-            authorization: 'c52618b5-5707-4e7f-96f5-da48c2905442',
+            authorization: `${authorizationData}`,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -62,11 +49,11 @@ function nameChange(name, about) {
 }
 //добавление карточки
 
-function cardAddForApi(name, link) {
-    return fetch('https://nomoreparties.co/v1/wff-cohort-5/cards/', {
+function addCardForApi(name, link) {
+    return fetch(`${commonLink}/cards/`, {
         method: 'POST',
         headers: {
-            authorization: 'c52618b5-5707-4e7f-96f5-da48c2905442',
+            authorization: `${authorizationData}`,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -79,11 +66,11 @@ function cardAddForApi(name, link) {
 }
 
 
-function addNewAvatar(link) {
-    return fetch('https://nomoreparties.co/v1/wff-cohort-5/users/me/avatar', {
+function addNewAvatar(link, profAvatar) {
+    return fetch(`${commonLink}/users/me/avatar`, {
         method: 'PATCH',
         headers: {
-            authorization: 'c52618b5-5707-4e7f-96f5-da48c2905442',
+            authorization: `${authorizationData}`,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -99,24 +86,22 @@ function addNewAvatar(link) {
         return Promise.reject(`Ошибка: ${res.status}`);
       })
     .then((data)=>{
-        profAvatar.style.backgroundImage = `url(${data.avatar})`;
-    })
-    .catch((err) => {
-        console.log(err); // выводим ошибку в консоль
-      })
+       profAvatar.style.backgroundImage = `url(${data.avatar})`;
+   })
+    
 
 }
 
 
 
-export { getUser, getCards, nameChange, cardAddForApi, addNewAvatar }
+export { getUser, getCards, changeName, addCardForApi, addNewAvatar }
 
 // like 
-export function likePut(id, likeCounter) {
-    return fetch(`https://nomoreparties.co/v1/wff-cohort-5/cards/likes/${id}`, {
+export function putLike(id, likeCounter) {
+    return fetch(`${commonLink}/cards/likes/${id}`, {
         method: 'PUT',
         headers: {
-            authorization: 'c52618b5-5707-4e7f-96f5-da48c2905442',
+            authorization: `${authorizationData}`,
             'Content-Type': 'application/json'
         }
     })
@@ -131,15 +116,13 @@ export function likePut(id, likeCounter) {
         .then((data) => {
             likeCounter.textContent = data.likes.length;
         })
-        .catch((err) => {
-            console.log(err); // выводим ошибку в консоль
-          })
+        
 }
-export function likeDelete(id, likeCounter) {
-    return fetch(`https://nomoreparties.co/v1/wff-cohort-5/cards/likes/${id}`, {
+export function deleteLike(id, likeCounter) {
+    return fetch(`${commonLink}/cards/likes/${id}`, {
         method: 'DELETE',
         headers: {
-            authorization: 'c52618b5-5707-4e7f-96f5-da48c2905442',
+            authorization: `${authorizationData}`,
             'Content-Type': 'application/json'
         }
     }
@@ -155,15 +138,13 @@ export function likeDelete(id, likeCounter) {
         .then((data) => {
             likeCounter.textContent = data.likes.length;
         })
-        .catch((err) => {
-            console.log(err); // выводим ошибку в консоль
-          })
+        
 }
-export function delCardApi(id){
-    return fetch(`https://nomoreparties.co/v1/wff-cohort-5/cards/${id}`, {
+export function deleteCardApi(id){
+    return fetch(`${commonLink}/cards/${id}`, {
                     method: 'DELETE',
                     headers: {
-                        authorization: 'c52618b5-5707-4e7f-96f5-da48c2905442',
+                        authorization: `${authorizationData}`,
                         'Content-Type': 'application/json'
                     }
                 })
@@ -175,7 +156,10 @@ export function delCardApi(id){
                     // если ошибка, отклоняем промис
                     return Promise.reject(`Ошибка: ${res.status}`);
                   })
-                  .catch((err) => {
+                  
+}
+/**
+.catch((err) => {
                     console.log(err); // выводим ошибку в консоль
                   })
-}
+ */

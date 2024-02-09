@@ -1,3 +1,4 @@
+import {config} from '../index'
 const showInputError = (formElement, inputElement, errorMessage, config) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
   inputElement.classList.add(config.inputErrorClass);
@@ -72,12 +73,4 @@ function clearValidation (formElement, config) {
       submitButton.classList.add(config.inactiveButtonClass);
     
 }
-const config = {
-  formSelector: ".popup__form",
-  inputSelector: ".popup__input",
-  submitButtonSelector: ".popup__button",
-  inactiveButtonClass: "popup__button_disabled",
-  inputErrorClass: "popup__input_type_error",
-  errorClass: "popup__error_visible"
-}
-export {enableValidation, config, clearValidation};
+export {enableValidation, clearValidation};

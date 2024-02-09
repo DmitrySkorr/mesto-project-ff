@@ -1,9 +1,9 @@
 import '../pages/index.css';
-import {getUser, getCards, nameChange, cardAddForApi, addNewAvatar} from './scripts/api'
-import {enableValidation, config, clearValidation} from './scripts/validation';
+import {getUser, getCards, changeName, addCardForApi, addNewAvatar} from './scripts/api'
+import {enableValidation, clearValidation} from './scripts/validation';
 import {closePopup, openPopup, closeEscPopup, setListenerOverlayButtton} from './modal';
 import { initialCards } from './cards';
-import {cardAdd, deleteCard, cardTemplate, iconLike} from './card';
+import {createCard, deleteCard, iconLike} from './card';
 const formAddElement = document.forms.new;
 const placeNameInput = document.querySelector('.popup__input_type_card-name');
 const placeLinklInput = document.querySelector('.popup__input_type_url');
@@ -32,6 +32,14 @@ const popupAvatarSaveButton = popupAvatarChenge.querySelector('.popup__button');
 const popupAddSaveButton = popupAdd.querySelector('.popup__button');
 const popupEditSaveButton = popupEdit.querySelector('.popup__button');
 export const myId = "22e891684787a52df5385b61";
+export const config = {
+    formSelector: ".popup__form",
+    inputSelector: ".popup__input",
+    submitButtonSelector: ".popup__button",
+    inactiveButtonClass: "popup__button_disabled",
+    inputErrorClass: "popup__input_type_error",
+    errorClass: "popup__error_visible"
+  }
 // @todo: DOM узлы
 // @todo: Вывести карточки на страницу
 /*initialCards.forEach(function (element) {
@@ -53,14 +61,12 @@ setListenerOverlayButtton(popupAvatarChenge);
 buttonAdd.addEventListener('click', function (evt) {
     openPopup(popupAdd);
     enableValidation(config);
-    clearValidation(formEditElementAddCard, config);
 });
 avatarButton.addEventListener('click', function(evt){
     openPopup(popupAvatarChenge);
     enableValidation(config);
-    clearValidation(formEditElementAddAvatar, config);
 })
-export function openimgPopup(evt){
+function openimgPopup(evt){
     openPopup(imgPopup);
     imgpopupImg.src = evt.target.src;
     imgpopupImg.alt=evt.target.closest('.card').textContent;
@@ -72,14 +78,16 @@ function handleFormEditSubmit(evt) {
     loading(true, popupEditSaveButton); 
     nameValue.textContent = nameInput.value;
     jobValue.textContent = jobInput.value;
-    nameChange(nameValue, jobValue)
+    changeName(nameValue, jobValue)
     .then(()=>{
         closePopup(popupEdit);
     })
     .finally(()=>{
         loading(false, popupEditSaveButton);
       })
-
+      .catch((err) => {
+        console.log(err); // выводим ошибку в консоль
+      })
 }
 formEditElement.addEventListener('submit', handleFormEditSubmit); 
 
@@ -87,16 +95,20 @@ formEditElement.addEventListener('submit', handleFormEditSubmit);
 formAddElement.addEventListener('submit', function(evt){
     evt.preventDefault();
     loading(true, popupAddSaveButton);
-    cardAddForApi(placeNameInput.value, placeLinklInput.value)
+    addCardForApi(placeNameInput.value, placeLinklInput.value)
     .then((res)=>res.json())
     .then((data)=>{
-        placesList.prepend(cardAdd(data.name, data.link, data.likes, data._id, data.owner._id,  deleteCard, iconLike, openimgPopup));
+        //data.name, data.link, data.likes, data._id, data.owner._id,
+        placesList.prepend(createCard(data,  deleteCard, iconLike, openimgPopup, myId));
     })
     .then(()=>{
         closePopup(popupAdd);
     })
     .finally(()=>{
         loading(false, popupAddSaveButton);
+      })
+    .catch((err) => {
+    console.log(err); // выводим ошибку в консоль
       })
     formAddElement.reset();
     //closePopup(popupAdd);
@@ -109,13 +121,17 @@ formAddElement.addEventListener('submit', function(evt){
 formEditElementAddAvatar.addEventListener('submit', function(evt){
     evt.preventDefault();
     loading(true, popupAvatarSaveButton);
-    addNewAvatar(avararLinkInput.value)
+    addNewAvatar(avararLinkInput.value, profAvatar)
     .then(()=>{
         closePopup(popupAvatarChenge);
+        
     })
     .finally(()=>{
         loading(false, popupAvatarSaveButton);
       })
+    .catch((err) => {
+        console.log(err); // выводим ошибку в консоль
+    })
     profAvatar.style.backgroundImage = "url(`${avararLinkInput.value}`)";
     //closePopup(popupAvatarChenge);
     formEditElementAddAvatar.reset();
@@ -130,3 +146,16 @@ function loading (isLoading, button) {
         button.textContent = 'Сохранить';
       }
 }
+Promise.all([getUser(), getCards()])
+    .then(([userData, cardsData]) => {
+        nameValue.textContent = userData.name;
+        jobValue.textContent = userData.about;
+        profAvatar.style.backgroundImage = `url(${userData.avatar})`;
+
+        cardsData.forEach(function (element) {
+            placesList.append(createCard(element, deleteCard, iconLike, openimgPopup, myId));
+        })
+    })
+    .catch((err) => {
+        console.log(err); // выводим ошибку в консоль
+      })
