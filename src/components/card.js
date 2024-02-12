@@ -61,9 +61,13 @@ function handleCardLike(evt, likes, likeCounter, id) {
 function delCard(ownerId, myId, delButton, id) {
   if (ownerId == myId) {
     delButton.addEventListener("click", function (evt) {
-      deleteCardApi(id).then(() => {
+      deleteCardApi(id)
+      .then(() => {
         deleteCard(evt);
-      });
+      })
+      .catch((err) => {
+        console.log(err); // выводим ошибку в консоль
+      })
     });
   }
 }

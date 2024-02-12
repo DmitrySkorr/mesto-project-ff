@@ -64,7 +64,6 @@ buttonEdit.addEventListener("click", function (evt) {
   openPopup(popupEdit);
   nameInput.value = nameValue.textContent;
   jobInput.value = jobValue.textContent;
-  enableValidation(config);
   clearValidation(formEditElement, config);
 });
 setListenerOverlayButtton(popupEdit);
@@ -74,11 +73,9 @@ setListenerOverlayButtton(popupAvatarChenge);
 
 buttonAdd.addEventListener("click", function (evt) {
   openPopup(popupAdd);
-  enableValidation(config);
 });
 avatarButton.addEventListener("click", function (evt) {
   openPopup(popupAvatarChenge);
-  enableValidation(config);
 });
 function openimgPopup(evt) {
   openPopup(imgPopup);
@@ -178,4 +175,6 @@ Promise.all([getUser(), getCards()])
   })
   .catch((err) => {
     console.log(err); // выводим ошибку в консоль
-  });
+  })
+enableValidation(config);
+
